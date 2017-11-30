@@ -72,7 +72,14 @@ var Keystone = function () {
 	this.set('allowed ip ranges', process.env.ALLOWED_IP_RANGES);
 
 	if (process.env.S3_BUCKET && process.env.S3_KEY && process.env.S3_SECRET) {
-		this.set('s3 config', { bucket: process.env.S3_BUCKET, key: process.env.S3_KEY, secret: process.env.S3_SECRET, region: process.env.S3_REGION });
+    	// V.I. Patch for China start
+    	if (process.env.IS_CHINA !== 'true') {
+      		this.set('s3 config', { bucket: process.env.S3_BUCKET, key: process.env.S3_KEY, secret: process.env.S3_SECRET, region: process.env.S3_REGION });
+    	} else {
+      		this.set('s3 config', { bucket: process.env.S3_BUCKET, key: process.env.S3_KEY, secret: process.env.S3_SECRET, region: process.env.S3_REGION, endpoint: process.env.S3_ENDPOINT });
+      		console.log('keystone s3 config:', this.get('s3 config'));
+    	}
+		// V.I. Patch for China finish
 	}
 
 	if (process.env.AZURE_STORAGE_ACCOUNT && process.env.AZURE_STORAGE_ACCESS_KEY) {
